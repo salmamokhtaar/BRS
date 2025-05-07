@@ -1,83 +1,191 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 function BusinessType() {
+  const cardsRef = useRef([]);
+
+  // Animation for cards on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    cardsRef.current.forEach((card) => {
+      if (card) {
+        observer.observe(card);
+      }
+    });
+
+    return () => {
+      cardsRef.current.forEach((card) => {
+        if (card) {
+          observer.unobserve(card);
+        }
+      });
+    };
+  }, []);
+
+  const businessTypes = [
+    {
+      title: "Sole Proprietorship",
+      description: "The simplest form of business ownership, where one individual owns and operates the business.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+        </svg>
+      ),
+      color: "blue"
+    },
+    {
+      title: "Partnership",
+      description: "A business owned by two or more individuals sharing responsibilities and profits.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+          <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+          <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+        </svg>
+      ),
+      color: "indigo"
+    },
+    {
+      title: "Limited Liability Company (LLC)",
+      description: "Combines the liability protection of a corporation with the tax benefits of a partnership.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+        </svg>
+      ),
+      color: "purple"
+    },
+    {
+      title: "Corporation",
+      description: "A separate legal entity from its owners, providing liability protection but requiring more compliance.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+          <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+        </svg>
+      ),
+      color: "red"
+    },
+    {
+      title: "Nonprofit Organization",
+      description: "Operates for charitable purposes and can obtain tax-exempt status.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+        </svg>
+      ),
+      color: "pink"
+    },
+    {
+      title: "Cooperative",
+      description: "Owned and operated for the benefit of its members, focusing on shared goals.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+        </svg>
+      ),
+      color: "green"
+    }
+  ];
+
+  const getColorClasses = (color) => {
+    const colorMap = {
+      blue: {
+        bg: "bg-blue-50",
+        text: "text-blue-600",
+        border: "border-blue-500",
+        icon: "text-blue-500"
+      },
+      indigo: {
+        bg: "bg-indigo-50",
+        text: "text-indigo-600",
+        border: "border-indigo-500",
+        icon: "text-indigo-500"
+      },
+      purple: {
+        bg: "bg-purple-50",
+        text: "text-purple-600",
+        border: "border-purple-500",
+        icon: "text-purple-500"
+      },
+      red: {
+        bg: "bg-red-50",
+        text: "text-red-600",
+        border: "border-red-500",
+        icon: "text-red-500"
+      },
+      pink: {
+        bg: "bg-pink-50",
+        text: "text-pink-600",
+        border: "border-pink-500",
+        icon: "text-pink-500"
+      },
+      green: {
+        bg: "bg-green-50",
+        text: "text-green-600",
+        border: "border-green-500",
+        icon: "text-green-500"
+      }
+    };
+
+    return colorMap[color] || colorMap.blue;
+  };
+
   return (
-    <div id="business-types" className="section relative pt-20 pb-8 md:pt-16 md:pb-0 bg-white">
+    <div id="business-types" className="section relative py-20 bg-gray-50">
       <div className="container xl:max-w-6xl mx-auto px-4">
-        <header className="text-center mx-auto mb-12 lg:px-20">
-          <h2 className="text-2xl leading-normal mb-2 font-bold text-blue-600">Business Registration Types</h2>
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 60" style={{ margin: '0 auto', height: '35px' }} xmlSpace="preserve">
-            <circle cx="50.1" cy="30.4" r="5" className="stroke-primary" style={{ fill: 'transparent', strokeWidth: 2, strokeMiterlimit: 10 }}></circle>
-            <line x1="55.1" y1="30.4" x2="100" y2="30.4" className="stroke-primary" style={{ strokeWidth: 2, strokeMiterlimit: 10 }}></line>
-            <line x1="45.1" y1="30.4" x2="0" y2="30.4" className="stroke-primary" style={{ strokeWidth: 2, strokeMiterlimit: 10 }}></line>
-          </svg>
-          <p className="text-gray-500 leading-relaxed font-light text-xl mx-auto">Choose the right structure for your business.</p>
+        <header className="text-center mx-auto mb-16 lg:px-20">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-blue-800">
+            Business Registration Types
+          </h2>
+          <div className="w-full max-w-lg mx-auto mb-6">
+            <div className="h-1 mx-auto bg-blue-600 w-40 opacity-75 my-0 py-0 rounded-full"></div>
+          </div>
+          <p className="text-gray-600 leading-relaxed font-light text-base sm:text-xl mx-auto max-w-2xl px-2">
+            Choose the right structure for your business to ensure optimal legal protection and tax benefits.
+          </p>
         </header>
-        <div className="flex flex-wrap flex-row -mx-4 text-center">
-          {[
-            {
-              title: "Sole Proprietorship",
-              description: "The simplest form of business ownership, where one individual owns and operates the business.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-                  <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-.5 10a2.5 2.5 0 1 1 1 0v-1a2.5 2.5 0 0 1-1 0v1zm1-2.5a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/>
-                </svg>
-              )
-            },
-            {
-              title: "Partnership",
-              description: "A business owned by two or more individuals sharing responsibilities and profits.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-people" viewBox="0 0 16 16">
-                  <path d="M9.5 8a2.5 2.5 0 1 0-5 0A2.5 2.5 0 0 0 9.5 8zM8 0a4 4 0 1 0 .001 8A4 4 0 0 0 8 0zm4.5 8a2.5 2.5 0 1 0-5 0A2.5 2.5 0 0 0 12.5 8zM12 0a4 4 0 1 0 .001 8A4 4 0 0 0 12 0z"/>
-                </svg>
-              )
-            },
-            {
-              title: "Limited Liability Company (LLC)",
-              description: "Combines the liability protection of a corporation with the tax benefits of a partnership.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-shield-lock" viewBox="0 0 16 16">
-                  <path d="M8 0s3 0 3 3v2.5a4.5 4.5 0 1 1-6 0V3s0-3 3-3zM4 6h8v3.5a5.5 5.5 0 1 1-8 0V6z"/>
-                </svg>
-              )
-            },
-            {
-              title: "Corporation",
-              description: "A separate legal entity from its owners, providing liability protection but requiring more compliance.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-building" viewBox="0 0 16 16">
-                  <path d="M1.5 0h13a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 15.5v-13A1.5 1.5 0 0 1 1.5 0zM1 2h14v12H1V2zm3 1h2v2H4V3zm0 3h2v2H4V6zm0 3h2v2H4V9zm3-6h2v2H7V3zm0 3h2v2H7V6zm0 3h2v2H7V9zm3-6h2v2h-2V3zm0 3h2v2h-2V6zm0 3h2v2h-2V9z"/>
-                </svg>
-              )
-            },
-            {
-              title: "Nonprofit Organization",
-              description: "Operates for charitable purposes and can obtain tax-exempt status.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">
-                  <path d="M8 2.748-.717 4.505a4.5 4.5 0 0 0 .697 8.845l.066.013 7.037 3.516 7.037-3.516.066-.013a4.5 4.5 0 0 0 .697-8.845L8 2.748zM8 0a3.5 3.5 0 0 1 2.497 5.939l-.139.134-1.348 1.348L8 9.184l-1.01-1.014-1.348-1.348-.139-.134A3.5 3.5 0 0 1 8 0z"/>
-                </svg>
-              )
-            },
-            {
-              title: "Cooperative",
-              description: "Owned and operated for the benefit of its members, focusing on shared goals.",
-              icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
-                  <path d="M3 9a3 3 0 1 1 4 0v3h2V9a3 3 0 1 1 4 0v3h2V9a5 5 0 0 0-10 0v3H3V9zm0 6a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/>
-                </svg>
-              )
-            }
-          ].map((service, index) => (
-            <div key={index} className="flex-shrink px-4 max-w-full w-full sm:w-1/2 lg:w-1/3 lg:px-6 wow fadeInUp" data-wow-duration="1s" style={{ animationDuration: '1s', animationName: 'fadeInUp' }}>
-              <div className="py-6 px-8 mb-12 bg-gray-50 border-b border-gray-100 transform transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-lg">
-                <div className="inline-block text-gray-900 mb-4">{service.icon}</div>
-                <h3 className="text-lg leading-normal mb-2 font-semibold text-blue-600">{service.title}</h3>
-                <p className="text-gray-500">{service.description}</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {businessTypes.map((type, index) => {
+            const colorClasses = getColorClasses(type.color);
+
+            return (
+              <div
+                key={index}
+                ref={(el) => (cardsRef.current[index] = el)}
+                className={`${colorClasses.bg} rounded-xl shadow-lg p-6 sm:p-8 transform transition-all duration-500 opacity-0 translate-y-8 hover:shadow-xl hover:-translate-y-2 border-t-4 ${colorClasses.border}`}
+              >
+                <div className={`${colorClasses.icon} mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-md`}>
+                  {type.icon}
+                </div>
+                <h3 className={`text-xl font-bold mb-4 ${colorClasses.text}`}>
+                  {type.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {type.description}
+                </p>
+                <div className="mt-6">
+                  <button className={`${colorClasses.text} hover:underline font-medium flex items-center`}>
+                    Learn more
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
