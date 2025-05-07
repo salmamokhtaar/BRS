@@ -1,14 +1,15 @@
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     ArcElement,
     Tooltip,
     Legend,
+    Title,
 } from 'chart.js';
 
 // Register the required components
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const BusinessChart = () => {
     const data = {
@@ -23,31 +24,52 @@ const BusinessChart = () => {
             {
                 data: [30, 20, 25, 15, 10], // Example percentages
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(76, 175, 80, 0.8)',  // Green
+                    'rgba(244, 67, 54, 0.8)',  // Red
+                    'rgba(33, 150, 243, 0.8)',  // Blue
+                    'rgba(156, 39, 176, 0.8)',  // Purple
+                    'rgba(255, 152, 0, 0.8)',  // Orange
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(153, 102, 255, 1)',
+                    'rgba(76, 175, 80, 1)',
+                    'rgba(244, 67, 54, 1)',
+                    'rgba(33, 150, 243, 1)',
+                    'rgba(156, 39, 176, 1)',
+                    'rgba(255, 152, 0, 1)',
                 ],
                 borderWidth: 1,
+                hoverOffset: 5,
             },
         ],
     };
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
         plugins: {
             legend: {
-                position: 'top',
+                position: 'right',
+                labels: {
+                    boxWidth: 10,
+                    padding: 10,
+                    font: {
+                        size: 10
+                    },
+                    color: '#666'
+                }
             },
             tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                titleFont: {
+                    size: 11,
+                    weight: 'bold'
+                },
+                bodyFont: {
+                    size: 10
+                },
+                padding: 8,
+                cornerRadius: 4,
                 callbacks: {
                     label: (tooltipItem) => {
                         return `${tooltipItem.label}: ${tooltipItem.raw}%`;
@@ -55,14 +77,16 @@ const BusinessChart = () => {
                 },
             },
         },
+        animation: {
+            animateScale: true,
+            animateRotate: true,
+            duration: 800
+        }
     };
 
     return (
-        <div className="flex  mt-5">
-            <div className="w-full md:w-1/3">
-                <h2 className="text-xl font-bold mb-4 mr-10">Business Type Distribution</h2>
-                <Pie data={data} options={options} />
-            </div>
+        <div className="h-full flex flex-col">
+            <Doughnut data={data} options={options} />
         </div>
     );
 };

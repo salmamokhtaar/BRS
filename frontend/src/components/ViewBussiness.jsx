@@ -68,7 +68,7 @@ function ManageBusinesses() {
     };
 
     return (
-        <div className="p-3 bg-gray-100">
+        <div className="p-3 bg-white">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">All Businesses</h1>
                 <button 

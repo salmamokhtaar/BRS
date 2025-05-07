@@ -28,7 +28,7 @@ function GenerateReports() {
     };
 
     return (
-        <div className="p-5 bg-gray-100">
+        <div className="p-5 bg-white">
             <h1 className="text-2xl font-bold mb-4">Generate Reports</h1>
             <form onSubmit={handleGenerateReport} className="mb-5">
                 <div className="mb-4">

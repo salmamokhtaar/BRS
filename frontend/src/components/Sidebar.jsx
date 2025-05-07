@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faSignOutAlt, 
-    faBusinessTime, 
-    faHome, 
-    faCheck, 
-    faUserCog, 
-    faCancel, 
-    faFileAlt, 
-    faBars, 
-    faTimes 
+import {
+    faSignOutAlt,
+    faBusinessTime,
+    faHome,
+    faCheck,
+    faUserCog,
+    faTimes,
+    faChartLine,
+    faBars,
+    faTimesCircle,
+    faTachometerAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Function to check if a link is active
+    const isActive = (path) => {
+        return location.pathname === path || location.pathname.startsWith(`${path}/`);
+    };
 
     // Function to toggle sidebar visibility
     const toggleSidebar = () => {
@@ -27,6 +34,11 @@ const Sidebar = () => {
         setIsOpen(false);
     };
 
+    // Close sidebar on route change
+    useEffect(() => {
+        closeSidebar();
+    }, [location.pathname]);
+
     // Function to handle logout
     const handleLogout = () => {
         localStorage.removeItem('token'); // Remove the token from localStorage
@@ -36,62 +48,115 @@ const Sidebar = () => {
     return (
         <>
             {/* Hamburger Menu Icon (Visible only on mobile) */}
-            <div className="md:hidden flex items-center z-50 fixed mt-16 ml-0">
-                <button onClick={toggleSidebar} className="p-2 rounded-full text-blue-600">
-                    {/* Toggle between Bars and Times icons */}
-                    <FontAwesomeIcon 
-                        icon={isOpen ? faTimes : faBars} 
-                        className={`text-2xl ${isOpen ? 'text-gray-50' : 'text-blue-600'}`} 
+            <div className="md:hidden flex items-center z-40 fixed top-16 left-4">
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2 rounded-full bg-blue-600 text-white shadow-lg"
+                >
+                    <FontAwesomeIcon
+                        icon={isOpen ? faTimes : faBars}
+                        className="text-lg"
                     />
                 </button>
             </div>
 
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 w-64 bg-white text-black shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}>
-                
-                {/* Close Icon inside Sidebar (Top-right) */}
-                <div className="absolute top-4 sm:hidden right-4">
-                    <button onClick={closeSidebar} className="text-blue-600 p-2 rounded-full">
-                        <FontAwesomeIcon icon={faTimes} className="text-2xl" />
-                    </button>
-                </div>
+            <aside className={`fixed inset-y-0 left-0 w-[220px] shadow-2xl  text-blue-600 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 z-30`}>
+        
 
-                <nav className="flex flex-col pt-4 font-bold">
-                    {/* Menu Item - Home */}
-                    <Link to="/dashboard" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faHome} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Home</span>
+                {/* Navigation */}
+                <div className="text-xs uppercase text-blue-700 font-semibold px-6 mt-6 mb-3">MAIN NAVIGATION</div>
+                <nav className="flex flex-col">
+                    {/* Dashboard */}
+                    <Link
+                        to="/dashboard"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard') && location.pathname === '/dashboard'
+                              
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faHome} className="text-lg mr-3" />
+                        <span className="text-sm">Dashboard</span>
                     </Link>
-                    {/* Menu Item - View */}
-                    <Link to="/dashboard/view-businesses" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faBusinessTime} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">View</span>
+
+                    {/* All Businesses */}
+                    <Link
+                        to="/dashboard/view-businesses"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard/view-businesses')
+                               
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faBusinessTime} className="text-lg mr-3" />
+                        <span className="text-sm">All Businesses</span>
                     </Link>
-                    {/* Menu Item - Approved */}
-                    <Link to="/dashboard/approved-registrations" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faCheck} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Approved</span>
+
+                    {/* Approved */}
+                    <Link
+                        to="/dashboard/approved-registrations"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard/approved-registrations')
+                              
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faCheck} className="text-lg mr-3" />
+                        <span className="text-sm">Approved</span>
                     </Link>
-                    {/* Menu Item - Rejected */}
-                    <Link to="/dashboard/rejected-registrations" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faCancel} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Rejected</span>
+
+                    {/* Rejected */}
+                    <Link
+                        to="/dashboard/rejected-registrations"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard/rejected-registrations')
+                             
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faTimesCircle} className="text-lg mr-3" />
+                        <span className="text-sm">Rejected</span>
                     </Link>
-                    {/* Menu Item - Manage Users */}
-                    <Link to="/dashboard/manage-users" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faUserCog} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Manage Users</span>
+
+                    <div className="text-xs uppercase text-blue-900 font-semibold px-6 mt-6 mb-3">ADMINISTRATION</div>
+
+                    {/* Manage Users */}
+                    <Link
+                        to="/dashboard/manage-users"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard/manage-users')
+                            
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faUserCog} className="text-lg mr-3" />
+                        <span className="text-sm">Manage Users</span>
                     </Link>
-                    {/* Menu Item - Reports */}
-                    <Link to="/dashboard/generate-reports" className="flex items-center py-3 px-4 hover:cursor-pointer rounded transition duration-200 text-blue-600 hover:bg-gray-100" onClick={closeSidebar}>
-                        <FontAwesomeIcon icon={faFileAlt} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Reports</span>
+
+                    {/* Analytics & Reports */}
+                    <Link
+                        to="/dashboard/generate-reports"
+                        className={`flex items-center py-3 px-6 transition duration-200 border-l-4 ${
+                            isActive('/dashboard/generate-reports')
+                           
+                        }`}
+                        onClick={closeSidebar}
+                    >
+                        <FontAwesomeIcon icon={faChartLine} className="text-lg mr-3" />
+                        <span className="text-sm">Analytics & Reports</span>
                     </Link>
+
                     {/* Logout */}
-                    <button onClick={handleLogout} className="flex items-center bg-white text-red-600 py-3 px-4 mt-10 hover:cursor-pointer rounded transition duration-200 hover:bg-gray-100">
-                        <FontAwesomeIcon icon={faSignOutAlt} className="mr-3 text-2xl" />
-                        <span className="hidden md:inline">Logout</span>
-                    </button>
+                    <div className="mt-auto">
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center w-full py-3 px-6 text-black  transition duration-200"
+                        >
+                            <FontAwesomeIcon icon={faSignOutAlt} className="text-lg mr-3" />
+                            <span className="text-sm">Logout</span>
+                        </button>
+                    </div>
                 </nav>
             </aside>
         </>

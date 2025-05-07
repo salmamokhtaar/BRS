@@ -46,7 +46,7 @@ function ApprovedRegistration() {
     };
 
     return (
-        <div className="p-5 bg-gray-100">
+        <div className="p-5 bg-white">
             <h1 className="text-2xl font-bold mb-4">Approved Businesses</h1>
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200">
